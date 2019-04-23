@@ -7,7 +7,7 @@ mock_db = [
     {
         "id":"07",
         "name":"Michael",
-        "course": "Mathmatics"
+        "course": "Finance"
      },
     {
         "id":"10",
