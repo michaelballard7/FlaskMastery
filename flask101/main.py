@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 
 """ When building in flask think from the servers perspective"""
 
@@ -27,17 +27,28 @@ def hello():
 # Post/store data: {name:}
 @app.route("/store", methods=["POST"])
 def create_store():
-    pass
+    # allow my endpoint to capture json from the browser
+    request_data = request.get_json()
+    new_store = {
+        'name':request_data['name'],
+        'items': []
+    }
+    stores.append(new_store)
+    return jsonify(new_store)
 
 # GET/store/<string:name>
 @app.route("/store/<string:name>", methods=["GET"]) # https://127.0.0.1:5000/store/some_name
 def get_store(name):
-    pass
-
+    store = [store for store in stores if store['name'] == name]
+    if store:
+        return jsonify({"store": store})
+    else:
+        return jsonify({"error" : "store is not found"})
+        
 # GET /store
 @app.route("/store")
 def get_stores():
-    pass
+    return jsonify({"stores":stores})  # json cannot be a list so I must make it into a dictionary
 
 
 # POST /store/<string:name>/item {name:price}
@@ -49,3 +60,5 @@ def create_item_in_store(name):
 @app.route("/store/<string:name>/item")
 def get_items_in_store(name):
     pass
+
+app.run()
