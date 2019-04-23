@@ -20,7 +20,6 @@ stores = [
 def hello():
     return "Hello"
 
-
 # Post - used to recieve data
 # Get - used to send data back
 
@@ -44,21 +43,33 @@ def get_store(name):
         return jsonify({"store": store})
     else:
         return jsonify({"error" : "store is not found"})
-        
+
 # GET /store
 @app.route("/store")
 def get_stores():
     return jsonify({"stores":stores})  # json cannot be a list so I must make it into a dictionary
 
-
 # POST /store/<string:name>/item {name:price}
 @app.route("/store/<string:name>/item", methods=["POST"])
 def create_item_in_store(name):
-    pass
+    request_data = request.get_json()
+    for store in stores:
+        if store['name'] == name:
+            new_item = {
+                'name': request_data['name'],
+                'price': request_data['price']
+            }
+            store['items'].append(new_item)
+            return jsonify({'store':store})
+    return jsonify({'message':'store is not found'})
+
 
 # GET /store/<string:name>/item
 @app.route("/store/<string:name>/item")
 def get_items_in_store(name):
-    pass
+    for store in stores:
+        if store['name'] == name:
+            return jsonify({'items': store['items']})
+    return jsonify({'message':"item is not found"})
 
 app.run()
