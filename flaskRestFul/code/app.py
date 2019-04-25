@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_restful import Resource, Api
 
@@ -6,14 +5,21 @@ from flask_restful import Resource, Api
 app = Flask(__name__)
 api = Api(app)
 
-# define the resource
-class Student(Resource):
-    # define the methods the resource can use
-    def get(self, name):
-        return {'student': name }
+items = []
 
-# add the resource to the api and add the route to be called
-api.add_resource(Student, '/student/<string:name>') # creates http://127.0.0.1:5000/student/some_name
+class Item(Resource):
+    def get(self,name):
+        item = [item for item in items if item['name'] == name]
+        if item:
+            return item
+        else:
+            return "sorry item doesn't exist"
 
+    def post(self, name):
+        item = {'name':name,'price':12.00}
+        items.append(item)
+        return item
 
-app.run(port=5000)
+api.add_resource(Item, '/item/<string:name>')
+
+app.run()
