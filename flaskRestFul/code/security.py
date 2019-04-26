@@ -1,21 +1,22 @@
 
 from user import User
+from werkzeug.security import safe_str_cmp
 
 users = [
-    User(1,"Tiffany","qwerty")
+    User(1,'Tiffany', 'qwerty')
 ]
 
-# by mapping over the user i do not have to iterate of a users list each time
-
-username_mapping = {u.username: u for u in  users }
-
-userid_mapping = {u.id: u for u in users}
+# check for error here:
+username_table = {u.username: u for u in users}
+userid_table = {u.id: u for u in users}
 
 def authenticate(username,password):
-    user = username_mapping.get(username, None)
-    if user and user.password == password:
+    user = username_table.get(username, None)
+    print("this should be firing", user)
+    if user and safe_str_cmp(user.password, password):
+        print("is there a user password?",user.password)
         return user
 
 def identity(payload):
     user_id = payload['identity']
-    return userid_mapping.get(user_id, None)
+    return userid_table.get(user_id, None)
