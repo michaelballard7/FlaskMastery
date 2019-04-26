@@ -9,27 +9,24 @@ items = []
 
 class Item(Resource):
     def get(self,name):
-        item = [item for item in items if item['name'] == name]
-        if item:
-            return item
-        else:
-            return {'item':None}, 404
+        item = next(filter(lambda x: x['name'] == name, items),None) # next returns the first item returned by a filter function
+        return {'item':item}, 200 if item else 404
 
     def post(self, name):
-
+        if item = next(filter(lambda x: x['name'] == name, items),None) is not None:
+            return {f"message": "An item with the name {name} exists already"},400
         data = request.get_json(force=True) # recieve data from headers
         item = {'name':data['name'],'price':data['price']}
         items.append(item)
         return item, 201
 
-
-    # def delete(self,name):
-    #     item = [item for item in items if item['name'] == name]
-    #     if item:
-    #         del items[name]
-    #         return items
-    #     else:
-    #         return {"error, object not for or deleted"}, 404
+    def delete(self,name):
+        item = [item for item in items if item['name'] == name]
+        if item:
+            del items[name]
+            return items
+        else:
+            return {"error, object not for or deleted"}, 404
 
 class ItemList(Resource):
     def get(self):
