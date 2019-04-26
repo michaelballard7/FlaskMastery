@@ -1,9 +1,10 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
+from secrets import *
 
 # define the app and api
 app = Flask(__name__)
-app.secret_key = 'secret'
+app.secret_key = SECRET_KEY
 api = Api(app)
 
 items = []

@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_restful import Resource, Api
 
+
 # define the app and api
 app = Flask(__name__)
 api = Api(app)
