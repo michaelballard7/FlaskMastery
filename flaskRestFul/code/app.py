@@ -14,14 +14,14 @@ items = []
 class Item(Resource):
     @jwt_required()
     def get(self,name):
-        item = next(filter(lambda x: x['name'] == name, items),None) # next returns the first item returned by a filter function
+        item = next(filter(lambda x: x['name'] == name, items),None)
         return {'item':item}, 200 if item else 404
 
     def post(self, name):
         if next(filter(lambda x: x['name'] == name, items),None):
             return {f"message": "An item with the name {name} exists already"},400
 
-        data = request.get_json() # recieve data from headers
+        data = request.get_json()
         item = {'name':data['name'],'price':data['price']}
         items.append(item)
         return item, 201
