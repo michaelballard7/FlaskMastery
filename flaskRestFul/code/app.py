@@ -4,12 +4,11 @@ from flask_jwt import  JWT, jwt_required
 from security import authenticate, identity
 from secrets import *
 
-# define the app and api
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 api = Api(app)
 
-jwt = JWT(app,authenticate, identity) # creates /auth, send a user name and password if matches returns a token
+jwt = JWT(app,authenticate, identity)
 items = []
 
 class Item(Resource):
