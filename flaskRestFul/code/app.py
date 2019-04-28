@@ -22,17 +22,15 @@ class Item(Resource):
             return {f"message": "An item with the name {name} exists already"},400
 
         data = request.get_json()
-        item = {'name':data['name'],'price':data['price']}
+        item = {'name': name,'price':data['price']}
         items.append(item)
         return item, 201
 
     def delete(self,name):
-        item = [item for item in items if item['name'] == name]
-        if item:
-            del items[name]
-            return items
-        else:
-            return {"error, object not for or deleted"}, 404
+        global items
+        items = list(filter(lambda x: x['name'] != name, items))
+        print(items)
+        return {"message":"Item deleted"}, 201
 
 class ItemList(Resource):
     def get(self):
